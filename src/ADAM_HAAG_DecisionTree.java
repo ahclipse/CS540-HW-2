@@ -1,3 +1,5 @@
+import java.util.ArrayDeque;
+
 import processing.core.*;
 import processing.data.*;
 
@@ -5,6 +7,7 @@ public class ADAM_HAAG_DecisionTree extends DrawableTree
 {
 	public ADAM_HAAG_DecisionTree(PApplet p) { super(p); }
 		
+	
 	// This method loads the examples from the provided filename, and
 	// then builds a decision tree (stored in the inherited field: tree).
 	// Each of the nodes in this resulting tree will be named after
@@ -17,6 +20,43 @@ public class ADAM_HAAG_DecisionTree extends DrawableTree
 		// trigger the DrawableTree's graphical rendering of the tree.
 		
 		// TODO - implement this method
+		tree = p.loadXML(filename);
+
+		XML[] kids = tree.getChildren();
+		
+		//Use a stack structure in order to traverse the whole tree to remove
+		//all null children added by 'loadXML'
+		ArrayDeque<XML[]> stack = new ArrayDeque<>();
+		
+		stack.push(kids);
+		
+		//Traverse the tree until no more levels are left
+		while(!stack.isEmpty()){
+			
+			XML[] curr = stack.pop();
+			
+			for (int i = 0; i < curr.length; i++) {
+
+				//If the name == "#text", this signals a null child, it is then
+				//removed from the parents list
+				if(curr[i].getName().equals("#text")){
+					XML parent = curr[i].getParent();
+					parent.removeChild(curr[i]);
+				}
+					
+				//If a current node has a child, add it to the stack
+				if(curr[i].hasChildren()){
+					stack.push(curr[i].getChildren());
+				}
+				
+			}
+			
+		} //End While
+		
+		dirtyTree = true;
+		
+		return;
+		
 	}
 			
 	// This method recursively builds a decision tree based on

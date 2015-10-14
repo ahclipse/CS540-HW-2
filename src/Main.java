@@ -15,7 +15,11 @@ public class Main extends PApplet
 		size(800,600);		
 		dtree = new ADAM_HAAG_DecisionTree(this);
 		
-		dtree.learnFromTrainingData("trainData.xml");
+		//TODO: Uncomment below code when ready to turn in
+//		dtree.learnFromTrainingData("trainData.xml");
+//		testAccuracy = dtree.runTests("testData.xml");
+		
+		dtree.learnFromTrainingData("smallTestData.xml");
 		testAccuracy = dtree.runTests("testData.xml");
 	}
 	
